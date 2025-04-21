@@ -1,5 +1,4 @@
 mod app;
-mod jira;
 
 use app::*;
 use leptos::prelude::*;
