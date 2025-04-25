@@ -26,7 +26,7 @@ mod tests {
     use jira_openapi_client::apis::sprint_api::get_sprint;
 
     #[tokio::test]
-    async fn test_get() {
+    async fn test_client() {
         dotenv::dotenv().ok();
 
         let api_key = dotenv::var("JIRA_API_KEY").unwrap();

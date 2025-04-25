@@ -29,6 +29,7 @@ thiserror = "2.0.12"
 leptos = { version = "0.7" }
 jira-openapi-client = { path = "../lib-tauri/jira-client" }
 url = "2.5.4"
+tauri-plugin-store = "2"
 
 [dev-dependencies]
 tokio = { version = "1", features = ["macros", "rt"] }

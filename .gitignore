@@ -11,3 +11,5 @@ dist/
 
 .env
 
+/test/gen/
+!/test/gen/.gitkeep
