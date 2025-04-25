@@ -27,6 +27,8 @@ dotenv = "0.15.0"
 ouroboros = "0.18.5"
 thiserror = "2.0.12"
 leptos = { version = "0.7" }
+jira-openapi-client = { path = "../lib-tauri/jira-client" }
+url = "2.5.4"
 
 [dev-dependencies]
 tokio = { version = "1", features = ["macros", "rt"] }
