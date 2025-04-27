@@ -372,7 +372,6 @@ pub async fn get_all_boards(configuration: &configuration::Configuration, max_re
 
     if !status.is_client_error() && !status.is_server_error() {
         let content = resp.text().await?;
-        println!("{}", &content);
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
             ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::BoardBean`"))),
@@ -689,7 +688,7 @@ pub async fn get_issues_for_backlog(configuration: &configuration::Configuration
 }
 
 /// Returns all issues from a board, for a given board Id. This only includes issues that the user has permission to view. Note, if the user does not have permission to view the board, no issues will be returned at all. Issues returned from this resource include Agile fields, like sprint, closedSprints, flagged, and epic. By default, the returned issues are ordered by rank.
-pub async fn get_issues_for_board(configuration: &configuration::Configuration, board_id: i64, expand: Option<&str>, jql: Option<&str>, max_results: Option<i32>, validate_query: Option<bool>, fields: Option<Vec<serde_json::Value>>, start_at: Option<i64>) -> Result<models::IssueBean, Error<GetIssuesForBoardError>> {
+pub async fn get_issues_for_board(configuration: &configuration::Configuration, board_id: i64, expand: Option<&str>, jql: Option<&str>, max_results: Option<i32>, validate_query: Option<bool>, fields: Option<Vec<serde_json::Value>>, start_at: Option<i64>) -> Result<models::SearchResultsBean, Error<GetIssuesForBoardError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_board_id = board_id;
     let p_expand = expand;

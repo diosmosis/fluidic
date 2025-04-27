@@ -1,42 +1,15 @@
 use jira_openapi_client::apis::board_api::{get_all_boards, get_all_sprints};
 use jira_openapi_client::apis::configuration::Configuration;
 use crate::stores::sprints::SprintsStore;
-
-#[derive(thiserror::Error, Debug)]
-pub enum Error {
-    #[error("Failed to synchronize sprints, {}", .0)]
-    ApiError(String),
-
-    #[error("No boards found in this project.")]
-    NoBoardsForProject,
-
-    #[error("Invalid JIRA API response encountered: {}", .0)]
-    InvalidApiResponse(String),
-}
+use crate::sync::Error;
+use crate::sync::project::get_project_board;
 
 pub async fn sync_sprints(
     store: &mut SprintsStore,
     api_config: &Configuration,
     project_key_or_id: &str
 ) -> Result<(), Error> {
-    // get the boards for the project
-    let boards =
-        get_all_boards(&api_config, None, None, Some(project_key_or_id), None, None)
-        .await
-        .map_err(|e| Error::ApiError(format!("could not get all boards: {}", e.to_string())))?
-        .values
-        .take_if(|v| !v.is_empty())
-        .ok_or(Error::NoBoardsForProject)?;
-
-    // pick first board
-    let board = boards.iter()
-        .filter(
-            |v| v.location.as_ref().is_some_and(|l| l.project_key == Some(project_key_or_id.to_string()))
-        ).take(1)
-        .next()
-        .ok_or(Error::NoBoardsForProject)?;
-
-    let board_id = board.id.ok_or(Error::InvalidApiResponse("missing board ID".into()))?;
+    let board_id = get_project_board(&api_config, project_key_or_id).await?;
 
     // get sprints for board
     let sprints = get_all_sprints(&api_config, board_id, None, None, None)
