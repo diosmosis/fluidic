@@ -13,3 +13,5 @@ dist/
 
 /test/gen/
 !/test/gen/.gitkeep
+
+node_modules/
