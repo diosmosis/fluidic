@@ -1,5 +1,6 @@
 {
   "base_uri": "a base uri",
   "user": "a user",
-  "api_key": "an api key"
+  "api_key": "an api key",
+  "project_key": "APROJECTKEY"
 }

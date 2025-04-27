@@ -326,7 +326,7 @@ pub async fn delete_property(configuration: &configuration::Configuration, prope
 }
 
 /// Returns all boards. This only includes boards that the user has permission to view.
-pub async fn get_all_boards(configuration: &configuration::Configuration, max_results: Option<i32>, name: Option<&str>, project_key_or_id: Option<&str>, r#type: Option<serde_json::Value>, start_at: Option<i64>) -> Result<models::BoardBean, Error<GetAllBoardsError>> {
+pub async fn get_all_boards(configuration: &configuration::Configuration, max_results: Option<i32>, name: Option<&str>, project_key_or_id: Option<&str>, r#type: Option<serde_json::Value>, start_at: Option<i64>) -> Result<models::PageBean<models::BoardBean>, Error<GetAllBoardsError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_max_results = max_results;
     let p_name = name;
@@ -372,6 +372,7 @@ pub async fn get_all_boards(configuration: &configuration::Configuration, max_re
 
     if !status.is_client_error() && !status.is_server_error() {
         let content = resp.text().await?;
+        println!("{}", &content);
         match content_type {
             ContentType::Json => serde_json::from_str(&content).map_err(Error::from),
             ContentType::Text => return Err(Error::from(serde_json::Error::custom("Received `text/plain` content type response that cannot be converted to `models::BoardBean`"))),
@@ -385,7 +386,7 @@ pub async fn get_all_boards(configuration: &configuration::Configuration, max_re
 }
 
 /// Returns all sprints from a board, for a given board Id. This only includes sprints that the user has permission to view.
-pub async fn get_all_sprints(configuration: &configuration::Configuration, board_id: i64, max_results: Option<i32>, state: Option<serde_json::Value>, start_at: Option<i64>) -> Result<models::SprintBean, Error<GetAllSprintsError>> {
+pub async fn get_all_sprints(configuration: &configuration::Configuration, board_id: i64, max_results: Option<i32>, state: Option<serde_json::Value>, start_at: Option<i64>) -> Result<models::PageBean<models::SprintBean>, Error<GetAllSprintsError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_board_id = board_id;
     let p_max_results = max_results;

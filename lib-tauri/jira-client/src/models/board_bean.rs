@@ -12,6 +12,24 @@ use crate::models;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
+pub struct BoardLocationBean {
+    #[serde(rename = "projectId", skip_serializing_if = "Option::is_none")]
+    pub project_id: Option<i64>,
+    #[serde(rename = "displayName", skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    #[serde(rename = "projectName", skip_serializing_if = "Option::is_none")]
+    pub project_name: Option<String>,
+    #[serde(rename = "projectKey", skip_serializing_if = "Option::is_none")]
+    pub project_key: Option<String>,
+    #[serde(rename = "projectTypeKey", skip_serializing_if = "Option::is_none")]
+    pub project_type_key: Option<String>,
+    #[serde(rename = "avatarURI", skip_serializing_if = "Option::is_none")]
+    pub avatar_uri: Option<String>,
+    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+#[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct BoardBean {
     #[serde(rename = "id", skip_serializing_if = "Option::is_none")]
     pub id: Option<i64>,
@@ -21,6 +39,8 @@ pub struct BoardBean {
     pub param_self: Option<String>,
     #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
     pub r#type: Option<String>,
+    #[serde(rename = "location", skip_serializing_if = "Option::is_none")]
+    pub location: Option<BoardLocationBean>,
 }
 
 impl BoardBean {
@@ -30,6 +50,7 @@ impl BoardBean {
             name: None,
             param_self: None,
             r#type: None,
+            location: None,
         }
     }
 }

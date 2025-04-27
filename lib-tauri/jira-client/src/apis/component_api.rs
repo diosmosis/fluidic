@@ -12,6 +12,7 @@
 use reqwest;
 use serde::{Deserialize, Serialize, de::Error as _};
 use crate::{apis::ResponseContent, models};
+use crate::models::ComponentBean;
 use super::{Error, configuration, ContentType};
 
 
@@ -222,7 +223,7 @@ pub async fn get_component_related_issues(configuration: &configuration::Configu
 }
 
 /// Returns paginated list of filtered active components
-pub async fn get_paginated_components(configuration: &configuration::Configuration, max_results: Option<&str>, query: Option<&str>, project_ids: Option<&str>, start_at: Option<&str>) -> Result<models::PageBean, Error<GetPaginatedComponentsError>> {
+pub async fn get_paginated_components(configuration: &configuration::Configuration, max_results: Option<&str>, query: Option<&str>, project_ids: Option<&str>, start_at: Option<&str>) -> Result<models::PageBean<ComponentBean>, Error<GetPaginatedComponentsError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_max_results = max_results;
     let p_query = query;

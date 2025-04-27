@@ -5,9 +5,11 @@ use serde_json::json;
 use crate::stores::signal::Signal;
 
 struct ConfigStore {
+    // TODO: if possible, should store this data in a keyring
     base_uri: Signal<Option<String>>,
     user: Signal<Option<String>>,
     api_key: Signal<Option<String>>,
+    project_key: Signal<Option<String>>,
 }
 
 #[derive(thiserror::Error, Debug)]
@@ -28,14 +30,20 @@ impl ConfigStore {
             base_uri: Signal::new(None),
             user: Signal::new(None),
             api_key: Signal::new(None),
+            project_key: Signal::new(None),
         }
+    }
+
+    fn unset_all(&mut self) {
+        self.base_uri.write.set(None);
+        self.user.write.set(None);
+        self.api_key.write.set(None);
+        self.project_key.write.set(None);
     }
 
     async fn load(&mut self, settings_file: &PathBuf) -> Result<(), Error> {
         if !settings_file.exists() {
-            self.base_uri.write.set(None);
-            self.user.write.set(None);
-            self.api_key.write.set(None);
+            self.unset_all();
             return Ok(());
         }
 
@@ -50,9 +58,7 @@ impl ConfigStore {
             ))?;
 
         if !value.is_object() {
-            self.base_uri.write.set(None);
-            self.user.write.set(None);
-            self.api_key.write.set(None);
+            self.unset_all();
             return Err(Error::LoadingFailed(format!("malformed file {}", &settings_file.display())));
         }
 
@@ -61,6 +67,7 @@ impl ConfigStore {
         let base_uri = value.get("base_uri").and_then(|v| v.as_str());
         let user = value.get("user").and_then(|v| v.as_str());
         let api_key = value.get("api_key").and_then(|v| v.as_str());
+        let project_key = value.get("project_key").and_then(|v| v.as_str());
 
         if let Some(s) = base_uri {
             self.base_uri.write.set(Some(s.to_string()));
@@ -78,6 +85,12 @@ impl ConfigStore {
             self.api_key.write.set(Some(s.to_string()));
         } else {
             malformed_properties.push("api_key");
+        }
+
+        if let Some(s) = project_key {
+            self.project_key.write.set(Some(s.to_string()));
+        } else {
+            malformed_properties.push("project_key"); // TODO: project_key in tests
         }
 
         if !malformed_properties.is_empty() {
@@ -137,6 +150,9 @@ mod tests {
 
         let api_key = config.api_key.read.get();
         assert_eq!(api_key, Some("an api key".to_string()));
+
+        let project_key = config.project_key.read.get();
+        assert_eq!(project_key, Some("APROJECTKEY".to_string()));
 
         Ok(())
     }

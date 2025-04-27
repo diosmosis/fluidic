@@ -12,6 +12,7 @@
 use reqwest;
 use serde::{Deserialize, Serialize, de::Error as _};
 use crate::{apis::ResponseContent, models};
+use crate::models::NotificationSchemeBean;
 use super::{Error, configuration, ContentType};
 
 
@@ -76,7 +77,7 @@ pub async fn get_notification_scheme(configuration: &configuration::Configuratio
 }
 
 /// Returns a paginated list of notification schemes. In order to access notification scheme, the calling user is required to have permissions to administer at least one project associated with the requested notification scheme. Each scheme contains a list of events and recipient configured to receive notifications for these events. Consumer should allow events without recipients to appear in response. The list is ordered by the scheme's name. Follow the documentation of /notificationscheme/{id} resource for all details about returned value. 
-pub async fn get_notification_schemes(configuration: &configuration::Configuration, expand: Option<&str>, max_results: Option<i32>, start_at: Option<i64>) -> Result<models::PageBean, Error<GetNotificationSchemesError>> {
+pub async fn get_notification_schemes(configuration: &configuration::Configuration, expand: Option<&str>, max_results: Option<i32>, start_at: Option<i64>) -> Result<models::PageBean<NotificationSchemeBean>, Error<GetNotificationSchemesError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_expand = expand;
     let p_max_results = max_results;

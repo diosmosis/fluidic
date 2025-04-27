@@ -10,9 +10,10 @@
 
 use crate::models;
 use serde::{Deserialize, Serialize};
+use serde::de::DeserializeOwned;
 
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
-pub struct PageBean {
+pub struct PageBean<T: Serialize + DeserializeOwned + Clone + Default + PartialEq> {
     #[serde(rename = "isLast", skip_serializing_if = "Option::is_none")]
     pub is_last: Option<bool>,
     #[serde(rename = "maxResults", skip_serializing_if = "Option::is_none")]
@@ -25,21 +26,6 @@ pub struct PageBean {
     pub start_at: Option<i64>,
     #[serde(rename = "total", skip_serializing_if = "Option::is_none")]
     pub total: Option<i64>,
-    #[serde(rename = "values", skip_serializing_if = "Option::is_none")]
-    pub values: Option<Vec<serde_json::Value>>,
+    #[serde(rename = "values", skip_serializing_if = "Option::is_none", bound(deserialize = "T: DeserializeOwned"))]
+    pub values: Option<Vec<T>>,
 }
-
-impl PageBean {
-    pub fn new() -> PageBean {
-        PageBean {
-            is_last: None,
-            max_results: None,
-            next_page: None,
-            param_self: None,
-            start_at: None,
-            total: None,
-            values: None,
-        }
-    }
-}
-

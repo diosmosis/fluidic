@@ -12,6 +12,7 @@
 use reqwest;
 use serde::{Deserialize, Serialize, de::Error as _};
 use crate::{apis::ResponseContent, models};
+use crate::models::VersionBean;
 use super::{Error, configuration, ContentType};
 
 
@@ -1362,7 +1363,7 @@ pub async fn get_project_versions(configuration: &configuration::Configuration, 
 }
 
 /// Returns all versions for the specified project. Results are paginated. Results can be ordered by the following fields: sequence, name, startDate, releaseDate.
-pub async fn get_project_versions_paginated(configuration: &configuration::Configuration, project_id_or_key: &str, expand: Option<&str>, max_results: Option<i32>, order_by: Option<&str>, start_at: Option<i64>) -> Result<models::PageBean, Error<GetProjectVersionsPaginatedError>> {
+pub async fn get_project_versions_paginated(configuration: &configuration::Configuration, project_id_or_key: &str, expand: Option<&str>, max_results: Option<i32>, order_by: Option<&str>, start_at: Option<i64>) -> Result<models::PageBean<VersionBean>, Error<GetProjectVersionsPaginatedError>> {
     // add a prefix to parameters to efficiently prevent name collisions
     let p_project_id_or_key = project_id_or_key;
     let p_expand = expand;
