@@ -1,10 +1,18 @@
 use leptos::prelude::*;
+use crate::components::*;
 
 #[component]
 pub fn IssueManager() -> impl IntoView {
     view! {
         <div>
-            TODO
+            <IssueCategories>
+            </IssueCategories>
+
+            <SearchInput>
+            </SearchInput>
+
+            <IssueList>
+            </IssueList>
         </div>
     }
 }

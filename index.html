@@ -1,11 +1,14 @@
 <!doctype html>
-<html>
+<html class="theme-dark">
   <head>
     <meta charset="utf-8" />
     <title>Tauri + Leptos App</title>
-    <link data-trunk rel="css" href="styles.css" />
     <link data-trunk rel="css" href="node_modules/bulma/css/bulma.css" />
+    <link data-trunk href="node_modules/@fortawesome/fontawesome-free/css/fontawesome.css" rel="css" />
+    <link data-trunk href="node_modules/@fortawesome/fontawesome-free/css/solid.css" rel="css" />
     <link data-trunk rel="copy-dir" href="public" />
+    <!-- TODO: don't need every webfont -->
+    <link data-trunk rel="copy-dir" href="node_modules/@fortawesome/fontawesome-free/webfonts" />
     <link data-trunk rel="rust" data-wasm-opt="z" />
   </head>
   <body></body>

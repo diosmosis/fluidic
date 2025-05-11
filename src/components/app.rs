@@ -1,4 +1,5 @@
 use leptos::prelude::*;
+use crate::components::*;
 /*
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
@@ -15,11 +16,17 @@ struct GreetArgs<'a> {
 }
 */
 
+// TODO: sync button
+
 #[component]
 pub fn App() -> impl IntoView {
     view! {
         <main class="container">
-            TODO
+            <IssueManager>
+            </IssueManager>
+
+            <IssueSidePanel>
+            </IssueSidePanel>
         </main>
     }
 }
